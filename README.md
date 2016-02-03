@@ -19,11 +19,11 @@ Usage: L | W <filename>
 Filename contains the firewall rules, each rule with the format ```<portno> <program name>``` 
 The program name must be the full path of the program, and cannot include sym-links.
 
-The method ```parseRules()``` opens this file and iterates through each lines, using a regular expression to check each rule is well formed. The rule is parsed using ```strtok``` to extract the path of the program name and check it exists (using stat command).
+The method ```parseRules``` opens this file and iterates through each lines, using a regular expression to check each rule is well formed. The rule is parsed using ```strtok``` to extract the path of the program name and check it exists (using stat command).
 
-If the rule is well formed, then it is added to a singly linked-list; this is then passed to ```writeToProc()```.
+If the rule is well formed and the program exists, then it is added to a singly linked list; this is then passed to ```writeToProc```.
 
-```writeToProc()``` writes each node in the linked list to the proc file, or just the flag (if L is used). The proc file is how the kernel communicates with userspace (and vice versa).
+```writeToProc``` writes each node in the linked list to the proc file, or just the flag (if L is used). The proc file is how the kernel communicates with userspace (and vice versa).
 
 firewallExtension.c
 -------------------
@@ -31,7 +31,7 @@ firewallExtension.c
 
 ```kernelRead``` acts as the interface between kernel space and userspace. The data from the proc file is read into the buffer and a switch statement is used to either print the rules or update them. 
 
-```updateRules()``` takes in a flag 'W' to mark the start of the rules and parses the rules until 'EOF' is read. The port no and program name is extracted and added to a linked list. The old linked list is then swapped out for the new one using a temporary variable. 
+```updateRules``` takes in a flag 'W' to mark the start of the rules and parses the rules until 'EOF' is read. The port no and program name is extracted and added to a linked list. The old linked list is then swapped out for the new one using a temporary variable. 
 
 The method ```FirewallExtensionHook``` was given as a template; it has been modified to check if an incoming connection can be allowed to proceeed. 
 
