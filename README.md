@@ -1,9 +1,11 @@
 # FirewallExtension-Linux-Kernel-Module-
-A kernel module that allows  programs on specified ports
+A kernel module that allows programs to operate on specified ports
 
-This was created for my operating systems module in my third year of study.
+This was created for an assignment for my operating systems module in my third year of study.
 
 The files include a userspace program firewallSetup.c and a kernel module firewallExtension.c (.ko when MakeFile executed). 
+
+When the MakeFile is executed, firewallExtension.ko needs to be inserted using ```insmod```.
 
 firewallSetup.c
 ---------------
@@ -14,11 +16,38 @@ This allows the user to either print the current firewall rules or specify new r
 ```
 Usage: L | W <filename>
 ```
-
 Filename contains the firewall rules, each rule with the format ```<portno> <program name>``` 
-The program name must be the full path of the program, and not include sym-links.
+The program name must be the full path of the program, and cannot include sym-links.
 
-The method ```parseRules()``` opens this file and iterates through each lines, using a regular expression to check each rule is well formed. The rule is parsed using ```strtok``` to check the program name exists (using stat command).
+The method ```parseRules()``` opens this file and iterates through each lines, using a regular expression to check each rule is well formed. The rule is parsed using ```strtok``` to extract the path of the program name and check it exists (using stat command).
 
 If the rule is well formed, then it is added to a singly linked-list; this is then passed to ```writeToProc()```.
+
+```writeToProc()``` writes each node in the linked list to the proc file, or just the flag (if L is used). The proc file is how the kernel communicates with userspace (and vice versa).
+
+firewallExtension.c
+-------------------
+-------------------
+
+```kernelRead``` acts as the interface between kernel space and userspace. The data from the proc file is read into the buffer and a switch statement is used to either print the rules or update them. 
+
+```updateRules()``` takes in a flag 'W' to mark the start of the rules and parses the rules until 'EOF' is read. The port no and program name is extracted and added to a linked list. The old linked list is then swapped out for the new one using a temporary variable. 
+
+The method ```FirewallExtensionHook``` was given to us as a template; it has been modified to check if an incoming connection can be allowed to proceeed. 
+
+```
+     path = findExecutable(); //get exectuable for each process
+
+	   if (isProgramAllowed(ntohs(tcp->dest), path)!=0) { //if not allowed
+	       tcp_done (sk); /* terminate connection immediately */
+	       printk (KERN_INFO "Program not allowed on this port: connection shut down\n");
+         kfree(path);
+	       return NF_DROP;
+	   }
+     kfree(path);
+     
+```
+I inserted the above code. It shows the char pointer ```path``` being assigned to the full path name of the program making a connection (e.g. telent). ```isProgramAllowed``` checks whether this program allowed on the port number (```ntohs(tcp->dest)```).
+
+```isProgramAllowed``` takes in a port number and the path of the program. It iterates through the linked list and checks if the port number is present. If it isn't then the program is allowed to connect; if it is, then list it iterated though again to check if the specified program is also present. 
 
