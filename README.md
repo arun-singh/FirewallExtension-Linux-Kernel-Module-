@@ -33,7 +33,7 @@ firewallExtension.c
 
 ```updateRules``` takes in a flag 'W' to mark the start of the rules and parses the rules until 'EOF' is read. The port no and program name is extracted and added to a linked list. The old linked list is then swapped out for the new one using a temporary variable. 
 
-The method ```FirewallExtensionHook``` was given as a template; it has been modified to check if an incoming connection can be allowed to proceeed. 
+The method ```FirewallExtensionHook``` was given as a template; it has been modified to check if an incoming connection can be allowed to proceed. 
 
 ```C
      path = findExecutable(); //get exectuable for each process
