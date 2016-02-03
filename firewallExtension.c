@@ -232,8 +232,7 @@ static ssize_t kernelRead (struct file *file, const char *buffer, unsigned long 
  * that, but it does mean we need to increment the
  * module's reference count. 
  */
-int procfs_open(struct inode *inode, struct file *file)
-{
+int procfs_open(struct inode *inode, struct file *file){
   if(down_write_trylock(&sem)==0){
     printk (KERN_INFO "Proc file in use\n");
     return -EAGAIN;
@@ -246,8 +245,7 @@ int procfs_open(struct inode *inode, struct file *file)
  * The file is closed - again, interesting only because
  * of the reference count. 
  */
-int procfs_close(struct inode *inode, struct file *file)
-{
+int procfs_close(struct inode *inode, struct file *file){
   up_write(&sem);
   module_put(THIS_MODULE);
   return 0;   /* success */
@@ -260,8 +258,7 @@ const struct file_operations File_Ops_4_Our_Proc_File = {
     .release = procfs_close,
 };
 
-int init_module(void)
-{
+int init_module(void){
 
   int errno;
   /* create the proc-file */
@@ -289,8 +286,7 @@ int init_module(void)
 }
 
 
-void cleanup_module(void)
-{
+void cleanup_module(void){
 
     nf_unregister_hook (&firewallExtension_ops); /* restore everything to normal */
     printk(KERN_INFO "Firewall extensions module unloaded\n");
