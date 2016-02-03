@@ -49,6 +49,8 @@ The method ```FirewallExtensionHook``` was given as a template; it has been modi
 ```
 I inserted the above code. It shows the char pointer ```path``` being assigned to the full path name of the program making a connection (e.g. telent). ```isProgramAllowed``` checks whether this program allowed on the port number (```ntohs(tcp->dest)```).
 
+```findExectutable``` gets the path of the executable of the currently connecting program. It combines the pid and ```kern_path``` method to get the dentry. This is then iterated through (backwards) to get the full path.
+
 ```isProgramAllowed``` takes in a port number and the path of the program. It iterates through the linked list and checks if the port number is present. If it isn't then the program is allowed to connect; if it is, then list it iterated though again to check if the specified program is also present. 
 
 ```printRules()``` is run if the 'L' flag is specified in the userspace program. It simply iterates through the linked list and prints each rule to the kernel log (/var/log/kern.log). 
