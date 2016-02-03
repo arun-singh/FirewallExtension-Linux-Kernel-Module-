@@ -29,13 +29,13 @@ firewallExtension.c
 -------------------
 -------------------
 
-```kernelRead``` acts as the interface between kernel space and userspace. The data from the proc file is read into the buffer and a switch statement is used to either print the rules or update them. 
+```kernelRead``` acts as the interface between kernel space and userspace. The data from the proc file is read into the buffer and a switch statement is used on the first character, to either print the rules or update them. 
 
 ```updateRules``` takes in a flag 'W' to mark the start of the rules and parses the rules until 'EOF' is read. The port no and program name is extracted and added to a linked list. The old linked list is then swapped out for the new one using a temporary variable. 
 
 The method ```FirewallExtensionHook``` was given as a template; it has been modified to check if an incoming connection can be allowed to proceeed. 
 
-```
+```C
      path = findExecutable(); //get exectuable for each process
 
 	   if (isProgramAllowed(ntohs(tcp->dest), path)!=0) { //if not allowed
