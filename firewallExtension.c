@@ -92,7 +92,7 @@ unsigned int FirewallExtensionHook (const struct nf_hook_ops *ops,
 	   if (isProgramAllowed(ntohs(tcp->dest), path)!=0) { //if not allowed
 	       tcp_done (sk); /* terminate connection immediately */
 	       printk (KERN_INFO "Program not allowed on this port: connection shut down\n");
-         kfree(path);
+               kfree(path);
 	       return NF_DROP;
 	   }
      kfree(path);
