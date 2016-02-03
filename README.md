@@ -33,7 +33,7 @@ firewallExtension.c
 
 ```updateRules()``` takes in a flag 'W' to mark the start of the rules and parses the rules until 'EOF' is read. The port no and program name is extracted and added to a linked list. The old linked list is then swapped out for the new one using a temporary variable. 
 
-The method ```FirewallExtensionHook``` was given to us as a template; it has been modified to check if an incoming connection can be allowed to proceeed. 
+The method ```FirewallExtensionHook``` was given as a template; it has been modified to check if an incoming connection can be allowed to proceeed. 
 
 ```
      path = findExecutable(); //get exectuable for each process
@@ -51,3 +51,4 @@ I inserted the above code. It shows the char pointer ```path``` being assigned t
 
 ```isProgramAllowed``` takes in a port number and the path of the program. It iterates through the linked list and checks if the port number is present. If it isn't then the program is allowed to connect; if it is, then list it iterated though again to check if the specified program is also present. 
 
+```printRules()``` is run if the 'L' flag is specified in the userspace program. It simply iterates through the linked list and prints each rule to the kernel log (/var/log/kern.log). 
