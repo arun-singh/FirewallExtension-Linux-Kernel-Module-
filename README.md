@@ -16,7 +16,7 @@ This allows the user to either print the current firewall rules or specify new r
 ```
 Usage: L | W <filename>
 ```
-Filename contains the firewall rules, each rule with the format ```<portno> <program name>``` 
+Filename contains the firewall rules, each rule with the format ```<portno> <program name>```.
 The program name must be the full path of the program, and cannot include sym-links.
 
 The method ```parseRules``` opens this file and iterates through each lines, using a regular expression to check each rule is well formed. The rule is parsed using ```strtok``` to extract the path of the program name and check it exists (using stat command).
