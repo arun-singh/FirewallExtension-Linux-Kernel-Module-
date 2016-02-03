@@ -162,7 +162,7 @@ int isProgramAllowed(int dest, char * p_name){
   if(portPresent==1){ //if port present, check for matching program name
     curr = firewall_rule_list->p_head;
     while(curr!=NULL){
-      if(curr->dest==dest && strcmp(curr->p_data, p_name)==0){
+      if(curr->dest==dest && strcmp(curr->p_data, p_name)==0){ //match found for port no. and program
         up_read(&sem);
         return 0; //connection allowed
       }
