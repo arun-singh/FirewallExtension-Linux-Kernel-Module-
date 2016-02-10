@@ -1,9 +1,3 @@
-// You will often see directives like these in header files, which avoid
-// erroneous re-definitions if the same header file is included multiple times
-// (e.g. if one header file includes another that indirectly includes some
-// that were already directly included).  If the pre-processor has already
-// seen '_LINKED_LIST_H' it will simply skip to the '#endif', avoiding
-// redefinition.
 #ifndef _LINKED_LIST_H
 #define _LINKED_LIST_H
 
